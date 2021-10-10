@@ -1,6 +1,46 @@
 # app engine
+# steps:
+# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#   entrypoint: 'bash'
+#   args: ['-c', 'gcloud config set app/cloud_build_timeout 1600 && gcloud app deploy']
+# timeout: '1600s'
+
+# steps:
+# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#   entrypoint: 'bash'
+#   args: ['-c', "export _VAL=$(echo $$SEC) 
+#           && echo $$SEC;echo $_VAL  && sed -i 's/{{sec}}/'$$SEC'/g' app.yaml
+#           && gcloud config set app/cloud_build_timeout 1600 && gcloud app deploy"
+#   ]
+#   secretEnv: ["SEC"]
+# availableSecrets:
+#   secretManager:
+#   - versionName: projects/$PROJECT_ID/secrets/db_secret/versions/3
+#     env: 'SEC'
+# timeout: '1600s'
+
 steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'bash'
-  args: ['-c', 'gcloud config set app/cloud_build_timeout 1600 && gcloud app deploy']
+  args: 
+    - '-c'
+    - |
+        export _VAL=$(echo $$SEC)
+        echo $$SEC
+        echo $_VAL
+        sed -i "s/%sec%/'$(echo $$SEC)'/g" app.yaml
+        gcloud config set app/cloud_build_timeout 1600 
+        gcloud app deploy
+  secretEnv: ["SEC"]
+availableSecrets:
+  secretManager:
+  - versionName: projects/$PROJECT_ID/secrets/db_secret/versions/1
+    env: 'SEC'
+
 timeout: '1600s'
+
+
+
+
+# printf '%s\n' '%s/find/replace/g' 'x' | app.yamla
+# sed -i 's/%SEC%/'{$$SEC}'/g' app.yaml

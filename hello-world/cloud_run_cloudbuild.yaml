@@ -9,6 +9,7 @@
  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
    entrypoint: gcloud
    args:
+   - 'beta'
    - 'run'
    - 'deploy'
    - 'demo'
@@ -16,5 +17,7 @@
    - 'gcr.io/$PROJECT_ID/demo:$COMMIT_SHA'
    - '--region'
    - 'asia-south1'
+   - '--update-secrets'
+   - '/etc/secrets/dbconfig.json=db_secret:1'
  images:
  - 'gcr.io/$PROJECT_ID/demo:$COMMIT_SHA'

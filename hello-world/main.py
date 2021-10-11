@@ -13,18 +13,18 @@ def dis():
 @app.route('/config')
 def config():
     # for cloud run when secrete mounted as volume
-    # with open('/etc/secrets/dbconfig.json','r') as f:
-    #         data = f.read()
-    # return data
+    with open('/etc/secrets/dbconfig.json','r') as f:
+            data = f.read()
+    return data
 
     # for app engine when secrete as env variable
-    data = os.environ.get("SEC")
-    info = os.environ['SEC']
-    print("before")
-    print(info)
-    print(data)
-    print("Afer")
-    return str(info)
+    # data = os.environ.get("SEC")
+    # info = os.environ['SEC']
+    # print("before")
+    # print(info)
+    # print(data)
+    # print("Afer")
+    # return str(info)
 
 
 if __name__ == "__main__":

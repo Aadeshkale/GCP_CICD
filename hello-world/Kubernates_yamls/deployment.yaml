@@ -1,12 +1,35 @@
-kind: Service
-apiVersion: v1
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  labels:
+    run: app-kube
   name: app-kube
 spec:
+  replicas: 2
   selector:
-     run: app-kube
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 8080
-  type: LoadBalancer
+    matchLabels:
+      run: app-kube
+  template:
+    metadata:
+      labels:
+        run: app-kube
+    spec:
+      containers:
+      - name: app-kube
+        image: gcr.io/gcp-tech/app-kube:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: myvol
+          mountPath: /etc/secrets/
+      volumes:
+      - name: myvol
+        secret:
+          secretName: dbsecret
+          defaultMode: 0400
+
+
+
+  
+
+  

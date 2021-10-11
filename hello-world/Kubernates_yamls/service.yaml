@@ -1,21 +1,12 @@
-apiVersion: apps/v1
-kind: Deployment
+kind: Service
+apiVersion: v1
 metadata:
-  labels:
-    run: app-kube
   name: app-kube
 spec:
-  replicas: 2
   selector:
-    matchLabels:
-      run: app-kube
-  template:
-    metadata:
-      labels:
-        run: app-kube
-    spec:
-      containers:
-      - image: gcr.io/gcp-tech/app-kube:latest
-        name: app-kube
-        ports:
-        - containerPort: 8080
+     run: app-kube
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
